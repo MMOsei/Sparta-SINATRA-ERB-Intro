@@ -29,6 +29,7 @@ class PostsController < Sinatra::Base
   ]
 
 
+  # INDEX
   get '/posts' do
 
     @title = "Posts Index"
@@ -37,11 +38,13 @@ class PostsController < Sinatra::Base
     erb :'posts/index'
   end
 
+  # GET/NEW
   get '/posts/new' do
     "New Post"
     erb :'posts/new'
   end
 
+  # GET/SHOW
   get '/posts/:id' do
     id = params[:id].to_i
     puts id.class
@@ -52,9 +55,42 @@ class PostsController < Sinatra::Base
     erb :'posts/show'
   end
 
+  # POST/CREATE
+  post '/posts' do
+
+    new_post ={
+      :title => params[:title],
+      :description => params[:description]
+
+    }
+  $posts.push new_post
+
+  redirect '/posts'
+  end
+
+  #UPDATE
+
+  put '/posts/:id' do
+    # get id from params
+    id = params[:id].to_i
+
+    #get hash from array
+    post = %posts[id]
+
+    # Update the necesary hash with the values form the params
+    post[:title] = params[:title]
+    post[:body] = params[:body]
+
+    #save new dat back in the array
+    $posts[id] = post
+  end
+
   get '/posts/:id/edit' do
 
     id = params[:id].to_i
+
+    @post = $posts[id]
+
     erb :'posts/edit'
   end
 
