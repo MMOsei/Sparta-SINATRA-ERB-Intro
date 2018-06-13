@@ -25,12 +25,12 @@ class PostsController < Sinatra::Base
       :id => 2,
       :title => "Post 3",
       :body => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    },
+    }
   ]
 
 
   # INDEX
-  get '/posts' do
+  get '/' do
 
     @title = "Posts Index"
     @posts = $posts
@@ -39,13 +39,17 @@ class PostsController < Sinatra::Base
   end
 
   # GET/NEW
-  get '/posts/new' do
-    "New Post"
+  get '/new' do
+    @post = {
+      :id => "",
+      :title => "",
+      :body => ""
+    }
     erb :'posts/new'
   end
 
   # GET/SHOW
-  get '/posts/:id' do
+  get '/:id' do
     id = params[:id].to_i
     puts id.class
 
@@ -56,26 +60,29 @@ class PostsController < Sinatra::Base
   end
 
   # POST/CREATE
-  post '/posts' do
+  post '/' do
+
+    id = $posts.last[:id] +1
 
     new_post ={
+      :id => id,
       :title => params[:title],
-      :description => params[:description]
+      :body => params[:body]
 
     }
-  $posts.push new_post
+    $posts.push new_post
 
-  redirect '/posts'
+    redirect '/'
   end
 
   #UPDATE
 
-  put '/posts/:id' do
+  put '/:id' do
     # get id from params
     id = params[:id].to_i
 
     #get hash from array
-    post = %posts[id]
+    post = $posts[id]
 
     # Update the necesary hash with the values form the params
     post[:title] = params[:title]
@@ -83,15 +90,29 @@ class PostsController < Sinatra::Base
 
     #save new dat back in the array
     $posts[id] = post
+
+    redirect '/'
   end
 
-  get '/posts/:id/edit' do
+  get '/:id/edit' do
 
     id = params[:id].to_i
 
     @post = $posts[id]
 
     erb :'posts/edit'
+  end
+
+  #DESTROY
+
+  delete '/:id' do
+
+    id = params{:id}
+
+    $posts.delete_at id
+
+    redirect '/'
+
   end
 
 end
