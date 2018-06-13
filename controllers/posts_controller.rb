@@ -10,8 +10,41 @@ class PostsController < Sinatra::Base
   # sets the view directory correctly
   set :views, Proc.new {File.join(root, "views") }
 
-  get '/' do
-    "Hello World"
+  $posts =[
+    {
+      :id => 0,
+      :title => "Post 1",
+      :body => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      :id => 1,
+      :title => "Post 2",
+      :body => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+    {
+      :id => 2,
+      :title => "Post 3",
+      :body => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    },
+  ]
+
+
+  get '/posts' do
+
+    @title = "Posts Index"
+    @posts = $posts
+
+    erb :'posts/index'
   end
 
+
+  get '/posts/:id' do
+    id = params[:id].to_i
+    puts id.class
+
+    @title = 'Show Posts'
+    @post = $posts[id]
+
+    erb :'posts/show'
+  end
 end
