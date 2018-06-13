@@ -37,6 +37,10 @@ class PostsController < Sinatra::Base
     erb :'posts/index'
   end
 
+  get '/posts/new' do
+    "New Post"
+    erb :'posts/new'
+  end
 
   get '/posts/:id' do
     id = params[:id].to_i
@@ -47,4 +51,11 @@ class PostsController < Sinatra::Base
 
     erb :'posts/show'
   end
+
+  get '/posts/:id/edit' do
+
+    id = params[:id].to_i
+    erb :'posts/edit'
+  end
+
 end
